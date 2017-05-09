@@ -3,6 +3,7 @@
 \usepackage{a4}
 \usepackage[none]{hyphenat} %hyphenation
 \sloppy
+\usepackage{cite} 
 \usepackage{parskip} %no indentation after paragraphs
 \usepackage{umlaute}
 \usepackage{afterpage} %for using \afterpage{\clearpage} (don't push images to the end of a chapter)
@@ -27,6 +28,13 @@
 \usepackage{algorithm} %wrap algpseudocode and enrich with label etc.
 \usepackage{float} % for [H] after floats
 
+%Declare custom math operathors
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator{\E}{\mathbb{E}}
+
+
 \titleformat{\paragraph}[hang]{\normalfont\bfseries}{\theparagraph}{.5em}{}
 
 \makeindex
@@ -41,7 +49,6 @@
 \topmargin0cm
 \oddsidemargin0cm
 \evensidemargin0cm
-
 
 \newcommand{\bildklein}[3]{  
 	\begin{figure}[hp]
@@ -159,7 +166,7 @@ München, DD.MM.YYYY\\\\\\\\\\\\
 \newpage
 \setcounter{page}{1}
 \hoffset=0mm
-\bibliographystyle{wmaainf} % quotation style
+%\bibliographystyle{wmaainf} % quotation style
 \setcounter{tocdepth}{3}
 \setcounter{secnumdepth}{3}
 \fboxsep 0mm
@@ -170,10 +177,11 @@ München, DD.MM.YYYY\\\\\\\\\\\\
 \setlength{\baselineskip}{3ex}
 
 \begin{spacing}{1.15}
-	%\input{chapter1}
-	%\input{chapter2}
-	%\input{chapter3}
-	%\input{chapter4}
+	\input{introduction}
+	\input{theory}
+	\input{eval}
+	\input{results}
+	\input{conclusion}
 \end{spacing}
 \newpage
 \thispagestyle{empty}
@@ -185,11 +193,9 @@ München, DD.MM.YYYY\\\\\\\\\\\\
 
 %\input{appendices}
 
-\newpage
-\thispagestyle{empty}
-\null
 	
 % Generierung des Literaturverzeichnisses
-%\bibliography{/path/to/your/.bib/file}
+\bibliographystyle{IEEEtran}
+\bibliography{references}
 
 \end{document}

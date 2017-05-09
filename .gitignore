@@ -1,0 +1,13 @@
+
+*.log
+*.aux
+*.gz
+*.toc
+*.sty
+*.lof
+*.idx
+*.pdf
+*.blg
+*.bbl
+*.DS_Store
+*.tks
