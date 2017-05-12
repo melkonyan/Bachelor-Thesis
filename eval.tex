@@ -5,4 +5,29 @@ The best way to judge the quality of generated contend is still by using real pe
 \subsection{Inception score}
 
 \subsection{Generative adversarial metric(GAM)}
-This method provides relative score when comparing several generative adversarial networks.
+Generative adversarial metric (GAM) is an another way of comparing the performance of two GANs. This metric does quantify the quality of a single GAN but rather can give a hint on which of two compared networks performs better. This is done by swapping the GANs' discriminators, as shown in figure 
+\begin{figure}[h]
+	\includegraphics[width=\textwidth]{figures/gam}
+	\caption{Visualization the GAM idea. First GAN consists of a generator $G_1$ and a discriminator $D_1$, the second one of $G_2$ and $D_2$ respectively. When the GAM is computed, GANs swap their discriminators, so that $D_1$ judges whether images data produced by $G_2$ look realistic or not, while $D_2$ does the same for $G_1$.}
+	\label{fig:gam}
+\end{figure}
+ 
+After exchanging discriminators two quantities are computed:
+\begin{align}
+	r_{real} &= \frac{\epsilon(D_1(x_{real}))}{\epsilon(D_2(x_{real}))} \\
+	r_{generated} &= \frac{\epsilon(D_1(G_2(z)))}{\epsilon(D_2(G_1(z))}, 
+\end{align}
+where $\epsilon(\cdot)$ denotes the misclassification ratio which is be computed by 
+\begin{equation*}
+	\frac{\text{correctly classified samples}}{\text{total number of samples}}.
+\end{equation*} 
+Then, depending on the values of the two indicators, we can conclude which GAN performs better:
+\begin{equation}
+\text{winner} = \begin{cases}
+	GAN_1, & \text{if } r_{generator} < 1 \text{ and } r_{real} \approx 1 \\
+	GAN_2, & \text{if } r_{generator} > 1 \text{ and } r_{real} \approx 1 \\
+	\text{tie}, & \text{if } r_{generator} \approx 1 \text{ and } r_{real} \approx 1  \\
+	\text{undefined}, & \text{if } r_{real} \neq 1	
+	\end{cases}
+\end{equation}
+Note that because we actually want to compare the generators, such a comparison is possible only if both discriminators perform equally well, which is indicated by the condition $r_{real} \approx 1$.  

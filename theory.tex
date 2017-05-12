@@ -116,12 +116,14 @@ Firstly, we can use the Kantorovich-Rubinstein duality to rewrite $W(P_r, P_\the
 \begin{equation}
 	W(P_r, P_\theta) = \sup_{\lVert f \lVert_L \leq 1} \E_{x \sim P_r}[f(x)] - E_{x \sim P_\theta} [f(x)],	
 \end{equation}
-where ${\lVert f \lVert_L \leq 1}$ denotes the set of all functions that are Lipschitz continuous with Lipschitz constant equal $1$, or also called \textit{1-Lipschitz} functions. If we replace this set with ${\lVert f \lVert_L \leq K}$ we will receive the upper bound for $K \cdot W(P_r, P_\theta)$ instead, which is still intractable to compute but easier to approximate. As already discussed, a generator $G$  encoded using a neural network with parameters $w$ is a $K$-Lipschitz function. Therefore
+where ${\lVert f \lVert_L \leq 1}$ denotes the set of all functions that are Lipschitz continuous with Lipschitz constant equal $1$, or also called \textit{1-Lipschitz} functions. If we replace this set with ${\lVert f \lVert_L \leq K}$ we will receive the upper bound for $K \cdot W(P_r, P_\theta)$ instead, which is still intractable to compute but easier to approximate. As already discussed, a discriminator $D$  encoded using a neural network with parameters $w$ is a $K$-Lipschitz function. Therefore
 \begin{align*}
-\max_w \E_{x \sim P_r}[D(x)] - E_{x \sim P_\theta} [D(x)] &\leq \sup_{\lVert f \lVert_L \leq K} \E_{x \sim P_r}[D(x)] - E_{x \sim P_\theta} [D(x)] \\
+\max_w \E_{x \sim P_r}[D(x)] - E_{x \sim P_\theta} [D(x)] &\leq \sup_{\lVert D \lVert_L \leq K} \E_{x \sim P_r}[D(x)] - E_{x \sim P_\theta} [D(x)] \\
  &= K \cdot W(P_r, P_\theta)
 \end{align*}
 Note, that supremum may not be achieved, if there is a $K$-Lipschitz function that can not be encoded with parameters $\theta$ or if the supremum is achieved for some $k$-Lipschitz function with $k < K$.
+
+One thing that is remained to do is to ensure that $K$ remains constant during the training process. One obvious way to do that is to restrict the space $S$ of possible function encoded by $D$, then the set of possible Lipschitz constants will be upper-bounded. We enforce discriminators to lie in $S$ by defining an upper and a lower bound for all weights of a discriminant, which will remain unchanged throughout the training process.
  
 To train the discriminator we have to compute the gradients of $W(P_r, P_\theta)$ with respect to $w$. In the same way, updates for Generator $G$ are obtained by computing the gradients with respect to $\theta$ 
 \begin{align*}
@@ -135,7 +137,52 @@ The training process therefore consists of the following steps:
 	\item With an optimal discriminator update the generator by computing the gradient $- \E_{z \sim Z} [\nabla_\theta D(G(z))]$
 	\item Enforce the discriminator $D$ to remain $K$-Lipschitz by clipping its to values $[-c, c]$, where $c$ remains constant during the training process. 
 \end{enumerate}
-Authors of the paper admit that enforcing $D$ to remain $K$-Lipschitz by clipping its parameters is not the best solution, and can be improved(TODO: this claim is not further explained in the original paper, thus I have to find more sources).
+
+Apart from the fact that the Wasserstein GAN allows more stable training, its loss function corresponds to the image quality. This is illustrated in figures~\ref{fig:losses} and~\ref{fig:samples_evolution}.
+
+\begin{figure}
+  \begin{subfigure}[b]{0.5\textwidth}
+    \includegraphics[width=\textwidth]{figures/gan_dis_loss}
+    \caption{GAN discriminator loss}
+    \label{fig:gan_dis_loss}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.5\textwidth}
+    \includegraphics[width=\textwidth]{figures/gan_gen_loss}
+    \caption{GAN generator loss}
+    \label{fig:gan_gen_loss}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.5\textwidth}
+    \includegraphics[width=\textwidth]{figures/wgan_dis_loss}
+    \caption{Wasserstein GAN discriminator loss}
+    \label{fig:wgan_dis_loss}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.5\textwidth}
+    \includegraphics[width=\textwidth]{figures/wgan_gen_loss}
+    \caption{Wasserstein GAN generator loss}
+    \label{fig:wgan_gen_loss}
+  \end{subfigure}
+  
+  \caption{Figures illustrating that WGAN has a correlation between the number of training steps and the values of its objective functions. On the other hand the objective functions of a GAN remain in the same interval although the quality of the samples increases.}
+  \label{fig:losses}
+\end{figure}
+\begin{figure}
+  \begin{subfigure}[b]{\textwidth}
+    \includegraphics[width=\textwidth]{figures/gan_progress}
+    \caption{Evolution of GAN generated samples quality}
+    \label{fig:gan_evolution}
+  \end{subfigure}
+  \begin{subfigure}[b]{\textwidth}
+    \includegraphics[width=\textwidth]{figures/wgan_progress}
+    \caption{Evolution of Wasserstein GAN generated samples quality}
+    \label{fig:gan_evolution}
+  \end{subfigure}
+  \caption{Samples generated after different number of training steps. Each sample is generated from the same noise variable.}
+  \label{fig:samples_evolution}
+\end{figure}
+
+
 \subsection{Improved WGANs}
 
 
