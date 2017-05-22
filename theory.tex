@@ -169,9 +169,7 @@ The training process therefore consists of the following steps:
 	\item With an optimal discriminator update the generator by computing the gradient $- \E_{z \sim Z} [\nabla_\theta D(G(z))]$	
 \end{enumerate}
 
-Apart from the fact that the Wasserstein GAN allows more stable training, its loss function corresponds to the image quality. This is illustrated in figures~\ref{fig:losses} and~\ref{fig:samples_evolution}.
-
-\begin{figure}
+\begin{figure}[h]
   \begin{subfigure}[b]{0.5\textwidth}
     \includegraphics[width=\textwidth]{figures/gan_dis_loss}
     \caption{GAN discriminator loss}
@@ -198,7 +196,7 @@ Apart from the fact that the Wasserstein GAN allows more stable training, its lo
   \caption{Figures illustrating that WGAN has a correlation between the number of training steps and the values of its objective functions. On the other hand the objective functions of a GAN remain in the same interval although the quality of the samples increases.}
   \label{fig:losses}
 \end{figure}
-\begin{figure}
+\begin{figure}[h]
   \begin{subfigure}[b]{\textwidth}
     \includegraphics[width=\textwidth]{figures/gan_progress}
     \caption{Evolution of GAN generated samples quality}
@@ -213,10 +211,14 @@ Apart from the fact that the Wasserstein GAN allows more stable training, its lo
   \label{fig:samples_evolution}
 \end{figure}
 
-\subsection{Deep Convolutional GANs (DCGANs)}
-So far we discussed GANs without paying attention to the architecture of the underlying generator and discriminator. On one hand, this is a powerful feature of the framework, because it allows a higher level of abstraction. It is possible to encode a generator and a discriminator using a deep convolutional neural network, an auto-encoder or every other network type. However, this choice inevitably affects the performance of the resulting GAN and therefore has to be done thoroughly. In my thesis I have used deep convolutional GANs (DCGANs) because they are well suited image generation tasks~\cite{dcgan}. In DCGANs both the generator and the discriminator are encoded convolutional neural networks (CNNs) and this section provides an overview of this network type. 
+Apart from the fact that the Wasserstein GAN allows more stable training, its loss function corresponds to the image quality. This is illustrated in Figures~\ref{fig:losses} and~\ref{fig:samples_evolution}.
 
-First introduced in 2002 by Yann LeCunn~\cite{lecun}, CNNs reached the peak of their popularity in 2012 when a CNN called AlexNet won an image recognition competition significantly improving all previous results~\cite{alexnet}. 
+
+
+\subsection{Deep Convolutional GANs (DCGANs)}
+So far we discussed GANs without paying attention to the architecture of underlying generator and discriminator. On one hand, this is a powerful feature of the framework, because it allows a higher level of abstraction. It is possible to encode a generator and a discriminator using a deep convolutional neural network, an auto-encoder or every other network type. However, this choice inevitably affects the performance of the resulting GAN and therefore has to be done thoroughly. In my thesis I have used deep convolutional GANs (DCGANs) because they are well suited image generation tasks~\cite{dcgan}. In DCGANs both a generator and a discriminator are encoded convolutional neural networks (CNNs) and this section provides an overview of this network type. 
+
+First introduced in 2002 by Yann LeCunn~\cite{lecun}, CNNs reached a peak of their popularity in 2012 when a CNN called AlexNet won an image recognition competition significantly improving all previous results~\cite{alexnet}. 
 
 
 \begin{figure}[h]
@@ -236,7 +238,7 @@ First introduced in 2002 by Yann LeCunn~\cite{lecun}, CNNs reached the peak of t
   \label{fig:conv_no_padding_no_strides}
 \end{figure}
 
-The core idea of CNNs is to learn hierarchies of location independent features present in an image. Features in the first layer of a CNN are just geometric primitives like edges, but last layers represent complex context dependent features like eyes or noses. Layers of a CNN are built of multiple \textit{convolution filters} that are applied to each patch of the input, as shown in figure~\ref{fig:conv_no_padding_no_strides}. A convolution filter $F$ is a matrix of weights $W \in \mathbb{R}^{K \times K}$. When applying $F$ to an input patch $P$ we simply compute the sum of the element-wise product between $F$ and $P$:
+The core idea of CNNs is to learn hierarchies of location independent features present in an image. Features in the first layer of a CNN are just geometric primitives like edges, but last layers represent complex context dependent features like eyes or noses. Layers of a CNN are built of multiple \textit{convolution filters} that are applied to each patch of the input, as shown in Figure~\ref{fig:conv_no_padding_no_strides}. A convolution filter $F \in \mathbb{R}^{K \times K}$ is a matrix of weights. When applying $F$ to a patch $P$ of the input we simply compute the sum of the element-wise product between $F$ and $P$:
 
 \begin{equation}
 	F * P  = \sum_{i=1}^K \sum_{j=1}^K f_{ij} \cdot p_{ij}.
@@ -270,16 +272,16 @@ The core idea of CNNs is to learn hierarchies of location independent features p
 %  \begin{subfigure}[b]{0.32\textwidth}
 %    \includegraphics[width=\textwidth]{figures/padding_strides_08}
 %  \end{subfigure}  
-  \caption{An example of a convolution filter with padding $p=1$ and strides $s = (1,1)$. The transparent cells of the lower matrix represent padded zero elements.}
+  \caption{An example of a convolution filter with padding $p=(1,1)$ and strides $s = (1,1)$. The transparent cells of the lower matrix represent padded zero elements.}
   \label{fig:conv_padding_strides}
 \end{figure}
 
-Since the same filter $F$ is applied to each patch of an input, it learns a location independent feature present there. Sometimes the input matrix is \textit{padded} with $p$ zeros, to increase the number of patches. The distance between the centers of two adjacent patches is called \textit{stride} $s$, as illustrated in figure~\ref{fig:conv_padding_strides}. Strides and padding allow to manipulate the size of the output:
+Since the same filter $F$ is applied to each patch of the input, it learns a location independent feature present there. Sometimes the input matrix is \textit{padded} with $p$ zeros to increase the number of patches. The distance between the centers of two adjacent patches is called \textit{stride} $s$, as illustrated in Figure~\ref{fig:conv_padding_strides}. Strides and padding allow to manipulate the size of the output:
 
 \begin{equation}
 	o = \Bigl\lfloor \frac{i + 2p - k}{s} \Bigr\rfloor + 1,
 \end{equation}
-where $i$ is the size of the input, $o$ size of the output, $k$ size of the convolution filter, $p$ and $s$ sizes of padding and strides respectively. After a convolution filter some non linear is applied to the output. The choice of the function can be crucial for the performance of the whole network and quite often is made by trial and error. In my experiments I have used leaky rectified linear units(leaky ReLUs): 
+where $i$ is the size of the input, $o$ size of the output, $k$ size of the convolution filter, $p$ and $s$ sizes of padding and strides respectively. After a convolution filter some non linear function is applied to the output. In my experiments I have used leaky rectified linear units(leaky ReLUs): 
 
 \begin{equation}
 	f(x) = \begin{cases}
@@ -288,7 +290,7 @@ where $i$ is the size of the input, $o$ size of the output, $k$ size of the conv
 			\end{cases}	
 \end{equation}
 
-In the DCGAN's generator another type of the convolution is used. It is called \textit{transposed convolution}. It comes from the fact that convolution operation can be rewritten as a product of an input and a sparse matrix $C$~\cite{conv_tutorial}. Then, we can transpose $C$ to swap the input and the output. The resulting product of the input and $C^T$ can be again replaced by sliding the convolutional matrix $F$ over the input. Example of a transposed convolution is shown in Figure~\ref{fig:conv_padding_strides_transposed}. An example of how multiple convolution and transposed convolution layers are stacked together is shown in Figure~\ref{fig:gan_arc}.
+In the DCGAN generator another convolution type is used. It is called \textit{transposed convolution}. The convolution operation can be rewritten as a product of the input and a sparse matrix $C$~\cite{conv_tutorial}. Then, we can transpose $C$ to swap the input and the output. The resulting product of the input and $C^T$ can be again replaced by sliding the convolutional matrix $F$ over the input. An example of a transposed convolution is shown in Figure~\ref{fig:conv_padding_strides_transposed}. An example of how multiple convolution and transposed convolution layers are stacked together is shown in Figure~\ref{fig:gan_arc}.
 
 \begin{figure}
 	\includegraphics[width=0.18\textwidth]{figures/padding_strides_transposed_00}
@@ -296,16 +298,16 @@ In the DCGAN's generator another type of the convolution is used. It is called \
 	\includegraphics[width=0.18\textwidth]{figures/padding_strides_transposed_02}
 	\includegraphics[width=0.18\textwidth]{figures/padding_strides_transposed_03}
 	\includegraphics[width=0.18\textwidth]{figures/padding_strides_transposed_04}
-	\caption{ The transpose of convolving a kernel $k=(3,3)$ over an input $i=(5,5)$ padded
-with $p=(1,1)$ border of zeros using strides $s=(2,2)$. It is equivalent to convolving a kernel $\tilde{k} = (3,3)$ over an input $\tilde{i} = (3,3)$ (with 1 zero inserted between inputs) padded with $p=(1,1)$, using unit strides.}
+	\caption{ The transpose of convolving a kernel $k=(3,3)$ over an input $i=(5,5)$ padded with $p=(1,1)$ border of zeros using strides $s=(2,2)$. It is equivalent to convolving a kernel $\tilde{k} = (3,3)$ over an input $\tilde{i} = (3,3)$ (with 1 zero inserted between inputs) padded with $p=(1,1)$, using unit strides.}
 	\label{fig:conv_padding_strides_transposed}
 \end{figure}
 
 \subsection{Batch normalization}
-An important technique used in the DCGAN is a \textit{batch normalization}~\cite{batch_norm}. If we consider a hidden layer of a neural network, its input is the output of all previous layers. This output will change each time we update the parameters of the previous layers. This can slow the training process and make the network sensitive to the initial values of the parameters. Batch normalization modifies the input of each layer to have zero mean and unit variance: 
+An important technique used in the DCGAN is the \textit{batch normalization}~\cite{batch_norm}. The input of a hidden\footnote{All layers of a neural network except the first and the last ones are called hidden layers} is in turn the output of all previous layers. Therefore, the distribution of this input will change each time we update parameters of the previous layers, a phenomenon known as \textit{internal covariate shift}. As a consequence, parameters of the hidden layer have to be constantly adapted for a new data distribution. This can slow down the training process and make the network sensitive to the initial values of the parameters. Batch normalization modifies the input mini-batch of each layer to have zero mean and unit variance: 
 \begin{align*}
 	\mu &= \frac{1}{m} \sum_{i=1}^{m}x_i \\
 	\sigma^2 &= \frac{1}{m} \sum_{i=1}^{m}(x_i - \mu)^2 \\
 	\hat{x}_i &= \frac{x_i - \mu}{\sqrt{\sigma+\epsilon}} \\
-	BN_{\gamma, \beta}(x_i) &= \gamma \hat{x}_i + \beta
+	BN_{\gamma, \beta}(x_i) &= \gamma \hat{x}_i + \beta,
 \end{align*}
+where $m$ is the number of samples in the mini-batch, $\epsilon$ is a constant to improve the numeric stability, $\gamma$ and $\beta$ are two more parameters to optimize during the training process. As shown in Figure~\ref{fig:gan_arc} batch normalization is applied to the inputs of all hidden layers of the GANs used in this paper.
