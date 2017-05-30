@@ -170,31 +170,31 @@ The training process therefore consists of the following steps:
 	\item With an optimal discriminator update the generator by computing the gradient $- \E_{z \sim Z} [\nabla_\theta D(G(z))]$	
 \end{enumerate}
 
-\begin{figure}[h]
+\begin{figure}[h!]
   \begin{subfigure}[b]{0.5\textwidth}
-    \includegraphics[width=\textwidth]{figures/gan_dis_loss}
+    \includegraphics[width=\textwidth]{figures/ex/gan_dis_loss}
     \caption{GAN discriminator loss}
     \label{fig:gan_dis_loss}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.5\textwidth}
-    \includegraphics[width=\textwidth]{figures/gan_gen_loss}
+    \includegraphics[width=\textwidth]{figures/ex/gan_gen_loss}
     \caption{GAN generator loss}
     \label{fig:gan_gen_loss}
   \end{subfigure}
   \begin{subfigure}[b]{0.5\textwidth}
-    \includegraphics[width=\textwidth]{figures/wgan_dis_loss}
+    \includegraphics[width=\textwidth]{figures/ex/wgan_dis_loss}
     \caption{Wasserstein GAN discriminator loss}
     \label{fig:wgan_dis_loss}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.5\textwidth}
-    \includegraphics[width=\textwidth]{figures/wgan_gen_loss}
+    \includegraphics[width=\textwidth]{figures/ex/wgan_gen_loss}
     \caption{Wasserstein GAN generator loss}
     \label{fig:wgan_gen_loss}
   \end{subfigure}
   
-  \caption{Figures illustrating that WGAN has a correlation between the number of training steps and the values of its objective functions. On the other hand the objective functions of a GAN remain in the same interval although the quality of the samples increases.}
+  \caption{Figures illustrating that WGAN has a correlation between the number of training steps and the values of its objective functions. On the other hand the loss of the GAN generator increases although the quality of the produced images increases too.}
   \label{fig:losses}
 \end{figure}
 \begin{figure}[h]

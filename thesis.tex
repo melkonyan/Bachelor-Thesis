@@ -1,4 +1,4 @@
-\documentclass[12pt]{report}
+\documentclass[12pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{a4}
 \usepackage[none]{hyphenat} %hyphenation
@@ -199,7 +199,7 @@ München, DD.MM.YYYY\\\\\\\\\\\\
 \null
 
 \newpage
-\addcontentsline{toc}{chapter}{List of figures}
+\addcontentsline{toc}{section}{List of figures}
 \listoffigures
 
 %\input{appendices}
@@ -208,5 +208,8 @@ München, DD.MM.YYYY\\\\\\\\\\\\
 % Generierung des Literaturverzeichnisses
 \bibliographystyle{IEEEtran}
 \bibliography{references}
+
+\newpage
+\input{appendix}
 
 \end{document}
