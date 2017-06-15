@@ -303,7 +303,7 @@ In the DCGAN generator another convolution type is used. It is called \textit{tr
 	\label{fig:conv_padding_strides_transposed}
 \end{figure}
 
-\subsection{Batch normalization}
+\subsection{Batch normalization} \label{sec:batch_norm}
 An important technique used in the DCGAN is the \textit{batch normalization}~\cite{batch_norm}. The input of a hidden\footnote{All layers of a neural network except the first and the last ones are called hidden layers} layer is in turn the output of all previous layers. Therefore, the distribution of this input will change each time we update parameters of the previous layers, a phenomenon known as \textit{internal covariate shift}. As a consequence, parameters of the hidden layer have to be constantly adapted for a new data distribution. This can slow down the training process and make the network sensitive to the initial values of the parameters. Batch normalization modifies the input mini-batch of each layer to have zero mean and unit variance: 
 \begin{align*}
 	\mu &= \frac{1}{m} \sum_{i=1}^{m}x_i \\
